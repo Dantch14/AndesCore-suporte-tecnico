@@ -29,6 +29,27 @@ As tecnologias utilizadas foram React 18, TypeScript, Vite, React Router, TanSta
 
 O código-fonte TypeScript e TSX fica organizado na pasta `src`. Durante o processo de build, o Vite compila e empacota os arquivos necessários para a aplicação, gerando a versão de produção na pasta `dist`.
 
+## Estrutura
+
+```
+src/
+├── main.tsx             ponto de entrada
+├── App.tsx              rotas e cabeçalho
+├── auth.tsx             sessão, papel do usuário e proteção de rotas
+├── supabase.ts          cliente do Supabase
+├── data.ts              leitura e escrita dos chamados (TanStack Query)
+├── tickets.ts           tipos, rótulos, validação e ordenação
+├── components/
+│   └── TicketRow.tsx    linha da fila (recebe o chamado por props)
+└── pages/
+    ├── Login.tsx
+    ├── OpenTicket.tsx   formulário de abertura
+    ├── TicketList.tsx   fila (administrador) / meus chamados (cliente)
+    └── TicketDetail.tsx
+supabase/
+└── schema.sql           tabelas, regras de acesso e permissões
+```
+
 ## Como executar o projeto
 
 Como rodar
@@ -60,28 +81,9 @@ O terminal mostra o endereço, normalmente http://localhost:5173.
 
 Para promover uma conta, crie-a pelo site e rode no SQL Editor, trocando o e-mail:
 
+``` 
 update public.profiles set role = 'admin'
 where id = (select id from auth.users where email = 'admin@exemplo.com');
-
-## Estrutura
-
-```
-src/
-├── main.tsx             ponto de entrada
-├── App.tsx              rotas e cabeçalho
-├── auth.tsx             sessão, papel do usuário e proteção de rotas
-├── supabase.ts          cliente do Supabase
-├── data.ts              leitura e escrita dos chamados (TanStack Query)
-├── tickets.ts           tipos, rótulos, validação e ordenação
-├── components/
-│   └── TicketRow.tsx    linha da fila (recebe o chamado por props)
-└── pages/
-    ├── Login.tsx
-    ├── OpenTicket.tsx   formulário de abertura
-    ├── TicketList.tsx   fila (administrador) / meus chamados (cliente)
-    └── TicketDetail.tsx
-supabase/
-└── schema.sql           tabelas, regras de acesso e permissões
 ```
 
 ## Autores
