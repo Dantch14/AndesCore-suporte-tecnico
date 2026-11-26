@@ -70,3 +70,12 @@ dt { font-size: .875rem; color: var(--ink-2); } dd { margin: 0; font-weight: 600
   .page { padding-top: var(--s8); }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+
+.top nav { align-items: baseline; flex-wrap: wrap; }
+.who { font-size: .875rem; color: var(--ink-2); }
+.linkbtn { font: inherit; font-size: .875rem; background: none; border: 0; padding: 0; color: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.actions .linkbtn { align-self: center; font-size: 1rem; }
+.note { margin: 0 0 var(--s4); }
+.btn:disabled, .seg button:disabled { opacity: .6; cursor: progress; }
+
+.seglabel { font-size: .875rem; font-weight: 600; margin: 0 0 var(--s1); }

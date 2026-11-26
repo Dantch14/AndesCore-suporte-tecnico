@@ -1,19 +1,14 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  addTicket, formatId, validate, URGENCY_LABEL,
-  type FieldErrors, type NewTicket, type Ticket, type Urgency,
+  formatId, validate,
+  type FieldErrors, type NewTicket, type Ticket,
 } from '../tickets';
+import { useCreateTicket } from '../data';
 
 type View = { kind: 'editing'; errors: FieldErrors } | { kind: 'done'; ticket: Ticket };
 
-const EMPTY: NewTicket = { nome: '', setor: '', descricao: '', urgencia: 'media' };
-const HINT: Record<Urgency, string> = {
-  baixa: 'Pode esperar até amanhã.',
-  media: 'Atrapalha, mas dá para trabalhar.',
-  alta: 'A empresa está parada.',
-};
-
+const EMPTY: NewTicket = { nome: '', setor: '', descricao: '' };
 function Field({ id, label, error, children }: { id: string; label: string; error?: string; children: ReactNode }) {
   return (
     <div className="field">
@@ -25,6 +20,7 @@ function Field({ id, label, error, children }: { id: string; label: string; erro
 }
 
 export default function OpenTicket() {
+  const create = useCreateTicket();
   const [draft, setDraft] = useState<NewTicket>(EMPTY);
   const [view, setView] = useState<View>({ kind: 'editing', errors: {} });
 
@@ -38,15 +34,19 @@ export default function OpenTicket() {
       setView({ kind: 'editing', errors });
       return;
     }
-    setView({ kind: 'done', ticket: addTicket(draft) });
-    setDraft(EMPTY);
+    create.mutate(draft, {
+      onSuccess: (ticket) => {
+        setView({ kind: 'done', ticket });
+        setDraft(EMPTY);
+      },
+    });
   }
 
   if (view.kind === 'done') {
     return (
       <section className="page" aria-live="polite">
         <h1>Chamado {formatId(view.ticket.id)} registrado.</h1>
-        <p className="lede">Ele entrou na fila com urgência {URGENCY_LABEL[view.ticket.urgencia].toLowerCase()}. Um técnico vai assumi-lo e o status muda na página do chamado.</p>
+        <p className="lede">Ele entrou na fila. A equipe vai definir a urgência e assumir o chamado, e você acompanha o andamento na página dele.</p>
         <p className="actions">
           <Link className="btn" to={`/chamados/${view.ticket.id}`}>Ver chamado</Link>
           <button type="button" className="btn ghost" onClick={() => setView({ kind: 'editing', errors: {} })}>Abrir outro</button>
@@ -65,7 +65,7 @@ export default function OpenTicket() {
     <section className="page split">
       <div>
         <h1>Descreva o problema.</h1>
-        <p className="lede">Cada chamado ganha um número e entra na fila. Quanto mais exato o relato, menos perguntas de volta.</p>
+        <p className="lede">Cada chamado ganha um número e entra na fila. Quanto mais exato o relato, menos perguntas de volta. A urgência é definida pela equipe.</p>
       </div>
       <form onSubmit={submit} noValidate>
         <Field id="nome" label="Seu nome" error={errors.nome}>
@@ -77,16 +77,8 @@ export default function OpenTicket() {
         <Field id="descricao" label="O que aconteceu" error={errors.descricao}>
           <textarea id="descricao" rows={5} value={draft.descricao} onChange={(e) => set('descricao', e.target.value)} {...aria('descricao')} />
         </Field>
-        <fieldset>
-          <legend>Urgência</legend>
-          {(Object.keys(URGENCY_LABEL) as Urgency[]).map((u) => (
-            <label key={u} className="choice">
-              <input type="radio" name="urgencia" value={u} checked={draft.urgencia === u} onChange={() => set('urgencia', u)} />
-              <span><strong>{URGENCY_LABEL[u]}</strong> {HINT[u]}</span>
-            </label>
-          ))}
-        </fieldset>
-        <button type="submit" className="btn">Abrir chamado</button>
+        {create.isError && <p className="error" role="alert">Não foi possível abrir o chamado. Tente de novo.</p>}
+        <button type="submit" className="btn" disabled={create.isPending}>{create.isPending ? 'Enviando…' : 'Abrir chamado'}</button>
       </form>
     </section>
   );
