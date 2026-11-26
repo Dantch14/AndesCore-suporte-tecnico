@@ -25,11 +25,9 @@ Enquanto que uma conta de administrador vê a fila completa, agrupada por status
 
 ## Tecnologias
 
-As tecnologias utilizadas foram React 18, TypeScript, Vite, React Router, TanStack Query e Supabase (banco PostgreSQL e autenticação).Ou seja, os dados são armazenados no Supabase em vez de localStorage.
+As tecnologias utilizadas foram React 18, TypeScript, Vite, React Router, TanStack Query e Supabase (banco PostgreSQL e autenticação). Ou seja, os dados são armazenados no Supabase em vez de localStorage.
 
 O código-fonte TypeScript e TSX fica organizado na pasta `src`. Durante o processo de build, o Vite compila e empacota os arquivos necessários para a aplicação, gerando a versão de produção na pasta `dist`.
-
-
 
 ## Como executar o projeto
 
@@ -45,6 +43,7 @@ Pré-requisito: Node.js instalado e uma conta gratuita no Supabase.
 6. Crie um arquivo .env na raiz do projeto, ao lado do package.json:
 
 VITE_SUPABASE_URL=https://SEU-PROJETO.supabase.co
+
 VITE_SUPABASE_ANON_KEY=sua-chave-publishable
 
 Os dois valores ficam no botão Connect do painel do Supabase. Use a chave pública (sb_publishable_... ou anon), nunca a secreta. 
