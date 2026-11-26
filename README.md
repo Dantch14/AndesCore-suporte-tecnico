@@ -42,9 +42,10 @@ Pré-requisito: Node.js instalado e uma conta gratuita no Supabase.
 5.Configure as variáveis. 
 6. Crie um arquivo .env na raiz do projeto, ao lado do package.json:
 
+``` 
 VITE_SUPABASE_URL=https://SEU-PROJETO.supabase.co
-
 VITE_SUPABASE_ANON_KEY=sua-chave-publishable
+```
 
 Os dois valores ficam no botão Connect do painel do Supabase. Use a chave pública (sb_publishable_... ou anon), nunca a secreta. 
 
@@ -64,29 +65,30 @@ where id = (select id from auth.users where email = 'admin@exemplo.com');
 
 ## Estrutura
 
+```
 src/
-├── main.tsx            ponto de entrada
-├── App.tsx             rotas e cabeçalho
-├── auth.tsx            sessão, papel do usuário e proteção de rotas
-├── supabase.ts         cliente do Supabase
-├── data.ts             leitura e escrita dos chamados (TanStack Query)
-├── tickets.ts          tipos, rótulos, validação e ordenação
+├── main.tsx             ponto de entrada
+├── App.tsx              rotas e cabeçalho
+├── auth.tsx             sessão, papel do usuário e proteção de rotas
+├── supabase.ts          cliente do Supabase
+├── data.ts              leitura e escrita dos chamados (TanStack Query)
+├── tickets.ts           tipos, rótulos, validação e ordenação
 ├── components/
-│   └── TicketRow.tsx   linha da fila (recebe o chamado por props)
+│   └── TicketRow.tsx    linha da fila (recebe o chamado por props)
 └── pages/
     ├── Login.tsx
-    ├── OpenTicket.tsx  formulário de abertura
-    ├── TicketList.tsx  fila (administrador) / meus chamados (cliente)
+    ├── OpenTicket.tsx   formulário de abertura
+    ├── TicketList.tsx   fila (administrador) / meus chamados (cliente)
     └── TicketDetail.tsx
 supabase/
-└── schema.sql          tabelas, regras de acesso e permissões
+└── schema.sql           tabelas, regras de acesso e permissões
+```
 
 ## Autores
 
+```
 Ana Beatriz França - 01896652
-
 Thiago Lucas - 01902382
-
 Erick Dante - 01911983
-
 Richard Eduardo da Silva - 01905736
+```
