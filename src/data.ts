@@ -69,3 +69,30 @@ export function useUpdateTicket() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: KEY }),
   });
 }
+
+async function deleteTicket(id: number): Promise<void> {
+  const { data, error } = await supabase.from('chamados').delete().eq('id', id).select('id');
+  if (error) throw error;
+  if (!data || data.length === 0) throw new Error('Sem permissão para apagar este chamado.');
+}
+
+async function renumberTickets(): Promise<void> {
+  const { error } = await supabase.rpc('renumerar_chamados');
+  if (error) throw error;
+}
+
+export function useDeleteTicket() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteTicket,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: KEY }),
+  });
+}
+
+export function useRenumberTickets() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: renumberTickets,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: KEY }),
+  });
+}

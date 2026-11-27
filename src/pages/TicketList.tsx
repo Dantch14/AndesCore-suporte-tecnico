@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
 import TicketRow from '../components/TicketRow';
+import ConfirmAction from '../components/ConfirmAction';
 import { useAuth } from '../auth';
-import { useTickets } from '../data';
+import { useRenumberTickets, useTickets } from '../data';
 import { byPriority, STATUSES, STATUS_LABEL } from '../tickets';
 
 export default function TicketList() {
   const query = useTickets();
+  const renumber = useRenumberTickets();
   const { auth } = useAuth();
   const isAdmin = auth.status === 'in' && auth.role === 'admin';
 
@@ -48,6 +50,14 @@ export default function TicketList() {
           </section>
         );
       })}
+      {isAdmin && (
+        <div className="maintenance">
+          <ConfirmAction label="Renumerar chamados" confirmLabel="Renumerar" pending={renumber.isPending}
+            question="Os chamados passam a ser numerados de 1 até N, na ordem de abertura. Quem já recebeu um número vai vê-lo mudar. Continuar?"
+            onConfirm={() => renumber.mutate()} />
+          {renumber.isError && <p className="error" role="alert">Não foi possível renumerar os chamados.</p>}
+        </div>
+      )}
     </section>
   );
 }

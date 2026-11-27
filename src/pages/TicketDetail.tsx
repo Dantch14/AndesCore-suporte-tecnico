@@ -1,12 +1,15 @@
 import { useState, type FormEvent } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import ConfirmAction from '../components/ConfirmAction';
 import { useAuth } from '../auth';
-import { useTickets, useUpdateTicket } from '../data';
+import { useDeleteTicket, useTickets, useUpdateTicket } from '../data';
 import { formatDate, formatId, STATUSES, STATUS_LABEL, URGENCIES, URGENCY_LABEL, type Ticket } from '../tickets';
 
 function Detail({ ticket, isAdmin }: { ticket: Ticket; isAdmin: boolean }) {
   const [tecnico, setDraft] = useState(ticket.tecnico);
   const update = useUpdateTicket();
+  const del = useDeleteTicket();
+  const navigate = useNavigate();
 
   function save(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -52,6 +55,11 @@ function Detail({ ticket, isAdmin }: { ticket: Ticket; isAdmin: boolean }) {
             <button type="submit" className="btn ghost" disabled={update.isPending}>Salvar</button>
           </form>
           {update.isError && <p className="error" role="alert">Não foi possível salvar a alteração.</p>}
+          <div className="maintenance">
+            <ConfirmAction label="Apagar chamado" question={`Apagar o chamado ${formatId(ticket.id)}? Isso não pode ser desfeito.`} confirmLabel="Apagar"
+              pending={del.isPending} onConfirm={() => del.mutate(ticket.id, { onSuccess: () => navigate('/chamados') })} />
+            {del.isError && <p className="error" role="alert">Não foi possível apagar o chamado.</p>}
+          </div>
         </>
       )}
     </section>

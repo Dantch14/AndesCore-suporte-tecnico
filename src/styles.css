@@ -79,3 +79,8 @@ dt { font-size: .875rem; color: var(--ink-2); } dd { margin: 0; font-weight: 600
 .btn:disabled, .seg button:disabled { opacity: .6; cursor: progress; }
 
 .seglabel { font-size: .875rem; font-weight: 600; margin: 0 0 var(--s1); }
+
+.danger { color: var(--signal); }
+.maintenance { margin-top: var(--s12); padding-top: var(--s4); border-top: 1px solid var(--rule); }
+.maintenance p { margin: 0 0 var(--s3); }
+.maintenance .btn + .btn { margin-left: var(--s3); }
